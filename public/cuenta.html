@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mi Cuenta — PERIOCHI</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;0,9..144,700;0,9..144,900&family=Archivo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --crema:#F4E9D2;--crema-2:#ECDEBE;--crema-3:#E3D2AA;
+  --verde:#1F3327;--verde-2:#2C4536;
+  --terracota:#CC5A2C;--rojo:#A23B24;
+  --mostaza:#D9A02C;--gris:#5B5B4C;
+  --sans:'Archivo',sans-serif;--display:'Fraunces',serif;
+  --container:1100px;--edge:clamp(1.25rem,4vw,3rem);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{font-family:var(--sans);background:var(--crema-2);color:var(--verde);-webkit-font-smoothing:antialiased;}
+a{color:inherit;text-decoration:none;}
+ul{list-style:none;}
+button{font-family:inherit;cursor:pointer;}
+::selection{background:var(--terracota);color:var(--crema);}
+.wrap{max-width:var(--container);margin:0 auto;padding-inline:var(--edge);}
+
+.btn{font-family:var(--sans);font-weight:700;font-size:.75rem;letter-spacing:.07em;text-transform:uppercase;padding:.85rem 1.5rem;border-radius:4px;display:inline-flex;align-items:center;gap:.5rem;transition:transform .15s,background .15s;cursor:pointer;border:none;}
+.btn:hover{transform:translateY(-1px);}
+.btn--verde{background:var(--verde);color:var(--crema);}
+.btn--verde:hover{background:var(--verde-2);}
+.btn--terracota{background:var(--terracota);color:var(--crema);}
+.btn--outline{background:transparent;border:1.5px solid var(--verde);color:var(--verde);}
+.btn--outline:hover{background:var(--verde);color:var(--crema);}
+.btn--sm{padding:.55rem 1rem;font-size:.68rem;}
+
+/* NAV */
+.nav{background:rgba(244,233,210,.97);backdrop-filter:blur(8px);position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:.85rem var(--edge);box-shadow:0 2px 14px rgba(31,51,39,.07);}
+.logo__word{display:flex;align-items:center;gap:.28rem;font-family:var(--display);font-weight:800;font-size:1.35rem;color:var(--verde);}
+.logo__spiral{width:15px;height:15px;color:var(--terracota);}
+.logo__tag{font-size:.5rem;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--verde);opacity:.65;}
+.nav__links{display:flex;gap:1.5rem;}
+.nav__links a{font-weight:700;font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;position:relative;padding-bottom:3px;}
+.nav__links a::after{content:"";position:absolute;left:0;bottom:0;height:1.5px;width:0;background:var(--terracota);transition:width .2s;}
+.nav__links a:hover::after,.nav__links a.active::after{width:100%;}
+.nav__links a.active{color:var(--terracota);}
+
+/* LAYOUT */
+.account-layout{display:grid;grid-template-columns:280px 1fr;gap:1.8rem;padding:2.5rem 0 5rem;align-items:start;}
+
+/* SIDEBAR */
+.acct-sidebar{background:var(--verde);color:var(--crema);border-radius:12px;overflow:hidden;position:sticky;top:5rem;}
+.acct-sidebar__top{padding:1.8rem 1.5rem;border-bottom:1px solid rgba(244,233,210,.1);}
+.acct-sidebar__avatar{width:52px;height:52px;background:var(--terracota);border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--display);font-weight:700;font-size:1.4rem;color:var(--crema);margin-bottom:.9rem;}
+.acct-sidebar__name{font-weight:800;font-size:1.05rem;}
+.acct-sidebar__email{font-size:.72rem;opacity:.65;margin-top:.15rem;}
+.acct-sidebar__pts{margin-top:.9rem;display:flex;align-items:center;gap:.5rem;background:rgba(217,160,44,.15);border:1px solid rgba(217,160,44,.35);border-radius:50px;padding:.4rem .8rem;font-weight:700;font-size:.76rem;color:var(--mostaza);}
+.acct-sidebar__nav{padding:.6rem 0;}
+.acct-nav-item{display:flex;align-items:center;gap:.6rem;padding:.7rem 1.5rem;font-weight:700;font-size:.76rem;letter-spacing:.04em;text-transform:uppercase;cursor:pointer;transition:background .15s;border-left:3px solid transparent;}
+.acct-nav-item:hover{background:rgba(244,233,210,.06);}
+.acct-nav-item.active{background:rgba(244,233,210,.1);border-left-color:var(--terracota);color:var(--crema);}
+.acct-nav-item svg{width:16px;height:16px;flex-shrink:0;}
+.acct-sidebar__footer{padding:1rem 1.5rem;border-top:1px solid rgba(244,233,210,.1);}
+.logout-btn{font-family:var(--sans);font-weight:700;font-size:.7rem;letter-spacing:.06em;text-transform:uppercase;color:rgba(244,233,210,.5);cursor:pointer;background:none;border:none;padding:0;transition:color .15s;}
+.logout-btn:hover{color:var(--crema);}
+
+/* PANELS */
+.acct-main{}
+.panel{display:none;}
+.panel.active{display:block;}
+
+.panel-header{margin-bottom:1.5rem;}
+.panel-header h1{font-family:var(--display);font-weight:700;font-size:1.6rem;}
+.panel-header p{color:var(--gris);font-size:.88rem;margin-top:.2rem;}
+
+/* POINTS PANEL */
+.pts-hero{background:var(--verde);color:var(--crema);border-radius:12px;padding:2rem;margin-bottom:1.5rem;position:relative;overflow:hidden;}
+.pts-hero__ornament{position:absolute;right:1.5rem;top:50%;transform:translateY(-50%);opacity:.08;font-family:var(--display);font-size:8rem;font-weight:900;line-height:1;pointer-events:none;}
+.pts-hero__label{font-weight:700;font-size:.65rem;letter-spacing:.16em;text-transform:uppercase;color:var(--mostaza);margin-bottom:.4rem;}
+.pts-hero__balance{font-family:var(--display);font-weight:900;font-size:3.5rem;line-height:1;color:var(--crema);}
+.pts-hero__sub{font-size:.82rem;opacity:.7;margin-top:.4rem;}
+.pts-hero__redeem{margin-top:1.2rem;font-size:.78rem;background:rgba(217,160,44,.15);border:1px solid rgba(217,160,44,.3);color:var(--mostaza);padding:.4rem .8rem;border-radius:4px;display:inline-block;font-weight:600;}
+
+.pts-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-bottom:1.5rem;}
+.pts-stat{background:var(--crema);border-radius:8px;padding:1.1rem 1rem;box-shadow:0 2px 8px rgba(31,51,39,.06);}
+.pts-stat__label{font-size:.66rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--gris);margin-bottom:.3rem;}
+.pts-stat__val{font-family:var(--display);font-weight:700;font-size:1.5rem;}
+.pts-stat__sub{font-size:.7rem;color:var(--gris);margin-top:.1rem;}
+
+.pts-history{background:var(--crema);border-radius:10px;overflow:hidden;box-shadow:0 2px 8px rgba(31,51,39,.06);}
+.pts-history h3{font-weight:800;font-size:.82rem;letter-spacing:.06em;text-transform:uppercase;padding:1rem 1.2rem;border-bottom:1px solid rgba(31,51,39,.08);}
+.pts-log-item{display:flex;align-items:center;gap:1rem;padding:.75rem 1.2rem;border-bottom:1px solid rgba(31,51,39,.05);}
+.pts-log-item:last-child{border-bottom:none;}
+.pts-log-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.pts-log-dot--pos{background:var(--verde);}
+.pts-log-dot--neg{background:var(--terracota);}
+.pts-log-info{flex:1;}
+.pts-log-reason{font-size:.84rem;font-weight:600;}
+.pts-log-date{font-size:.7rem;color:var(--gris);}
+.pts-log-delta{font-weight:800;font-size:.9rem;}
+.pts-log-delta--pos{color:var(--verde);}
+.pts-log-delta--neg{color:var(--terracota);}
+.pts-empty{padding:2rem;text-align:center;color:var(--gris);font-size:.88rem;}
+
+/* ORDERS PANEL */
+.orders-list{display:flex;flex-direction:column;gap:1rem;}
+.order-card{background:var(--crema);border-radius:10px;overflow:hidden;box-shadow:0 2px 8px rgba(31,51,39,.06);}
+.order-card__head{display:flex;align-items:center;justify-content:space-between;padding:.9rem 1.2rem;border-bottom:1px solid rgba(31,51,39,.07);flex-wrap:wrap;gap:.5rem;}
+.order-card__num{font-weight:800;font-size:.82rem;letter-spacing:.05em;}
+.order-card__date{font-size:.72rem;color:var(--gris);}
+.order-status{font-size:.66rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:.2rem .6rem;border-radius:50px;}
+.status--pendiente{background:rgba(217,160,44,.15);color:#8a6400;}
+.status--preparando{background:rgba(31,51,39,.1);color:var(--verde);}
+.status--enviado{background:rgba(44,69,54,.15);color:var(--verde-2);}
+.status--entregado{background:rgba(31,51,39,.12);color:var(--verde);}
+.order-card__body{padding:1rem 1.2rem;}
+.order-item-row{display:flex;justify-content:space-between;font-size:.84rem;padding:.15rem 0;}
+.order-item-row:not(:last-child){border-bottom:1px solid rgba(31,51,39,.05);}
+.order-card__foot{display:flex;justify-content:space-between;align-items:center;padding:.7rem 1.2rem;background:var(--crema-2);font-size:.82rem;flex-wrap:wrap;gap:.3rem;}
+.order-card__total{font-weight:800;}
+.order-card__pts{font-size:.7rem;font-weight:700;color:var(--mostaza);}
+
+/* PROFILE PANEL */
+.profile-card{background:var(--crema);border-radius:10px;padding:1.8rem;box-shadow:0 2px 8px rgba(31,51,39,.06);}
+.form-group{margin-bottom:1rem;}
+.form-group label{display:block;font-weight:700;font-size:.7rem;letter-spacing:.07em;text-transform:uppercase;margin-bottom:.4rem;}
+.form-group input{width:100%;padding:.75rem .9rem;border:1.5px solid rgba(31,51,39,.2);border-radius:5px;font-family:var(--sans);font-size:.9rem;background:white;color:var(--verde);transition:border-color .2s;}
+.form-group input:focus{outline:none;border-color:var(--terracota);}
+.form-group input[readonly]{background:var(--crema-2);cursor:default;}
+.form-msg{padding:.7rem 1rem;border-radius:5px;font-size:.8rem;font-weight:600;margin-bottom:.8rem;}
+.form-msg--ok{background:rgba(31,51,39,.08);color:var(--verde);}
+.form-msg--err{background:rgba(162,59,36,.1);color:var(--rojo);}
+
+/* LOGIN GATE */
+.login-gate{text-align:center;padding:5rem 2rem;background:var(--crema);border-radius:12px;}
+.login-gate h2{font-family:var(--display);font-weight:700;font-size:1.8rem;margin-bottom:.6rem;}
+.login-gate p{color:var(--gris);margin-bottom:1.5rem;}
+.modal-overlay{position:fixed;inset:0;background:rgba(31,51,39,.6);z-index:800;display:flex;align-items:center;justify-content:center;padding:1rem;opacity:0;pointer-events:none;transition:opacity .25s;backdrop-filter:blur(4px);}
+.modal-overlay.open{opacity:1;pointer-events:all;}
+.modal{background:var(--crema);border-radius:12px;width:100%;max-width:400px;overflow:hidden;transform:translateY(12px);transition:transform .25s;}
+.modal-overlay.open .modal{transform:translateY(0);}
+.modal__head{padding:1.3rem 1.5rem;background:var(--verde);color:var(--crema);display:flex;justify-content:space-between;align-items:center;}
+.modal__head h2{font-weight:800;font-size:.95rem;letter-spacing:.04em;text-transform:uppercase;}
+.modal__close{color:var(--crema);opacity:.7;font-size:1.1rem;background:none;border:none;cursor:pointer;}
+.modal__body{padding:1.5rem;}
+.modal__tabs{display:flex;border-bottom:2px solid rgba(31,51,39,.1);margin-bottom:1.3rem;}
+.modal__tab{flex:1;padding:.5rem;font-weight:700;font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;text-align:center;cursor:pointer;border:none;background:none;border-bottom:2.5px solid transparent;margin-bottom:-2px;transition:color .2s,border-color .2s;font-family:var(--sans);}
+.modal__tab.active{color:var(--terracota);border-bottom-color:var(--terracota);}
+
+/* ── FOOTER ── */
+.site-footer{background:var(--verde);color:var(--crema);padding:4rem 0 2.2rem;margin-top:4rem;}
+.site-footer__grid{display:grid;grid-template-columns:.9fr 1.1fr 1fr;gap:2.5rem;align-items:center;max-width:var(--container);margin:0 auto;padding-inline:var(--edge);}
+.site-footer__social{display:flex;gap:.7rem;margin-top:1.1rem;}
+.social-btn{width:34px;height:34px;border-radius:50%;border:1.4px solid rgba(244,233,210,.55);display:flex;align-items:center;justify-content:center;transition:background .2s,border-color .2s;}
+.social-btn:hover{background:rgba(244,233,210,.12);border-color:var(--crema);}
+.social-btn svg{width:15px;height:15px;color:var(--crema);}
+.site-footer__cta h3{font-weight:800;font-size:1.4rem;}
+.site-footer__cta p{opacity:.82;margin:.4rem 0 1.1rem;font-size:.92rem;}
+.site-footer__bottom{max-width:var(--container);margin:.8rem auto 0;padding:1.4rem var(--edge) 0;border-top:1px solid rgba(244,233,210,.15);display:flex;justify-content:space-between;flex-wrap:wrap;gap:.5rem;font-size:.72rem;opacity:.55;letter-spacing:.04em;}
+@media(max-width:860px){.site-footer__grid{grid-template-columns:1fr;text-align:center;}.site-footer__social{justify-content:center;}}
+
+@media(max-width:860px){
+  .account-layout{grid-template-columns:1fr;}
+  .acct-sidebar{position:static;}
+  .acct-sidebar__nav{display:flex;overflow-x:auto;padding:.3rem 0;}
+  .acct-nav-item{white-space:nowrap;border-left:none;border-bottom:3px solid transparent;}
+  .acct-nav-item.active{border-left:none;border-bottom-color:var(--terracota);}
+  .pts-stats{grid-template-columns:1fr 1fr;}
+}
+@media(max-width:560px){.pts-stats{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+<defs>
+  <symbol id="ico-espiral" viewBox="0 0 40 40"><path d="M20,4 C32,4 36,14 30,22 C25,29 14,27 14,19 C14,13 21,11 24,16" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round"/></symbol>
+  <symbol id="ico-star" viewBox="0 0 40 40"><path d="M20,2 L24,17 L38,20 L24,23 L20,38 L16,23 L2,20 L16,17 Z" fill="currentColor"/></symbol>
+  <symbol id="ico-orders" viewBox="0 0 40 40"><rect x="6" y="6" width="28" height="28" rx="4" fill="none" stroke="currentColor" stroke-width="2.4"/><line x1="12" y1="14" x2="28" y2="14" stroke="currentColor" stroke-width="2"/><line x1="12" y1="20" x2="28" y2="20" stroke="currentColor" stroke-width="2"/><line x1="12" y1="26" x2="22" y2="26" stroke="currentColor" stroke-width="2"/></symbol>
+  <symbol id="ico-user" viewBox="0 0 40 40"><circle cx="20" cy="14" r="7" fill="none" stroke="currentColor" stroke-width="2.6"/><path d="M6,36 C6,28 34,28 34,36" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/></symbol>
+  <symbol id="ico-pts" viewBox="0 0 40 40"><circle cx="20" cy="20" r="15" fill="none" stroke="currentColor" stroke-width="2.4"/><path d="M20,5 L24,17 L38,20 L24,23 L20,35 L16,23 L2,20 L16,17 Z" fill="currentColor" opacity=".5"/></symbol>
+</defs>
+</svg>
+
+<!-- NAV -->
+<nav class="nav">
+  <a href="/" style="display:flex;align-items:center;">
+    <img src="/logo_largo.png" alt="PERIOCHI" height="34" style="display:block;width:auto;">
+  </a>
+  <div class="nav__links">
+    <a href="/">Inicio</a>
+    <a href="/tienda.html">Tienda</a>
+    <a href="/cuenta.html" class="active">Mi Cuenta</a>
+  </div>
+</nav>
+
+<!-- LOGIN GATE (shown when not logged in) -->
+<div id="loginGate" style="display:none;padding:4rem var(--edge)">
+  <div class="login-gate">
+    <h2>Accede a tu cuenta</h2>
+    <p>Inicia sesión para ver tus puntos Periochi, pedidos y perfil.</p>
+    <button class="btn btn--verde" onclick="openAuth()">Ingresar</button>
+    <span style="margin:0 .6rem;color:var(--gris)">·</span>
+    <button class="btn btn--outline" onclick="openAuth('register')">Crear cuenta</button>
+  </div>
+</div>
+
+<!-- ACCOUNT LAYOUT -->
+<div id="accountLayout" style="display:none">
+  <div class="wrap account-layout">
+    <!-- SIDEBAR -->
+    <aside class="acct-sidebar">
+      <div class="acct-sidebar__top">
+        <div class="acct-sidebar__avatar" id="sideAvatar">P</div>
+        <div class="acct-sidebar__name" id="sideName">—</div>
+        <div class="acct-sidebar__email" id="sideEmail">—</div>
+        <div class="acct-sidebar__pts">
+          <svg width="12" height="12" viewBox="0 0 40 40"><use href="#ico-star"/></svg>
+          <span id="sidePts">0</span> Puntos Periochi
+        </div>
+      </div>
+      <nav class="acct-sidebar__nav">
+        <button class="acct-nav-item active" onclick="showPanel('pts')">
+          <svg viewBox="0 0 40 40"><use href="#ico-pts"/></svg> Mis Puntos
+        </button>
+        <button class="acct-nav-item" onclick="showPanel('orders')">
+          <svg viewBox="0 0 40 40"><use href="#ico-orders"/></svg> Pedidos
+        </button>
+        <button class="acct-nav-item" onclick="showPanel('profile')">
+          <svg viewBox="0 0 40 40"><use href="#ico-user"/></svg> Perfil
+        </button>
+      </nav>
+      <div class="acct-sidebar__footer">
+        <button class="logout-btn" onclick="doLogout()">Cerrar sesión →</button>
+      </div>
+    </aside>
+
+    <!-- MAIN -->
+    <main class="acct-main">
+      <!-- PUNTOS -->
+      <div class="panel active" id="panel-pts">
+        <div class="panel-header">
+          <h1>Mis Puntos</h1>
+          <p>Acumula puntos en cada compra y canjéalos por descuentos.</p>
+        </div>
+        <div class="pts-hero">
+          <div class="pts-hero__ornament">✦</div>
+          <div class="pts-hero__label">Balance actual</div>
+          <div class="pts-hero__balance" id="ptsBalance">0</div>
+          <div class="pts-hero__sub">Puntos Periochi disponibles</div>
+          <div class="pts-hero__redeem" id="ptsRedeemVal">Equivalen a $0 COP en descuentos</div>
+        </div>
+        <div class="pts-stats">
+          <div class="pts-stat">
+            <div class="pts-stat__label">Ganados total</div>
+            <div class="pts-stat__val" id="statEarned">—</div>
+            <div class="pts-stat__sub">puntos acumulados</div>
+          </div>
+          <div class="pts-stat">
+            <div class="pts-stat__label">Canjeados</div>
+            <div class="pts-stat__val" id="statRedeemed">—</div>
+            <div class="pts-stat__sub">puntos usados</div>
+          </div>
+          <div class="pts-stat">
+            <div class="pts-stat__label">Compras</div>
+            <div class="pts-stat__val" id="statOrders">—</div>
+            <div class="pts-stat__sub">pedidos realizados</div>
+          </div>
+        </div>
+        <div class="pts-history">
+          <h3>Historial de puntos</h3>
+          <div id="ptsHistoryList"><div class="pts-empty">Cargando...</div></div>
+        </div>
+      </div>
+
+      <!-- PEDIDOS -->
+      <div class="panel" id="panel-orders">
+        <div class="panel-header">
+          <h1>Mis Pedidos</h1>
+          <p>Historial de todas tus compras Periochi.</p>
+        </div>
+        <div class="orders-list" id="ordersList">
+          <div style="text-align:center;padding:2rem;color:var(--gris)">Cargando...</div>
+        </div>
+      </div>
+
+      <!-- PERFIL -->
+      <div class="panel" id="panel-profile">
+        <div class="panel-header">
+          <h1>Mi Perfil</h1>
+        </div>
+        <div class="profile-card">
+          <div id="profileMsg"></div>
+          <div class="form-group"><label>Nombre</label><input type="text" id="profName"></div>
+          <div class="form-group"><label>Correo electrónico</label><input type="email" id="profEmail" readonly></div>
+          <div class="form-group"><label>Miembro desde</label><input type="text" id="profSince" readonly></div>
+          <button class="btn btn--verde" onclick="updateProfile()">Guardar cambios</button>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<!-- AUTH MODAL -->
+<div class="modal-overlay" id="authModal">
+  <div class="modal">
+    <div class="modal__head">
+      <h2>Accede a Periochi</h2>
+      <button class="modal__close" onclick="closeAuth()">✕</button>
+    </div>
+    <div class="modal__body">
+      <div class="modal__tabs">
+        <button class="modal__tab active" id="tabLogin" onclick="switchTab('login')">Ingresar</button>
+        <button class="modal__tab" id="tabRegister" onclick="switchTab('register')">Registrarse</button>
+      </div>
+      <div id="authMsg"></div>
+      <form id="loginForm" onsubmit="doLogin(event)">
+        <div class="form-group"><label>Correo</label><input type="email" id="loginEmail" required autocomplete="email"></div>
+        <div class="form-group"><label>Contraseña</label><input type="password" id="loginPass" required></div>
+        <button type="submit" class="btn btn--verde" style="width:100%;margin-top:.3rem" id="loginBtn">Ingresar</button>
+      </form>
+      <form id="registerForm" style="display:none" onsubmit="doRegister(event)">
+        <div class="form-group"><label>Nombre</label><input type="text" id="regName" required></div>
+        <div class="form-group"><label>Correo</label><input type="email" id="regEmail" required></div>
+        <div class="form-group"><label>Contraseña</label><input type="password" id="regPass" required minlength="6"></div>
+        <button type="submit" class="btn btn--verde" style="width:100%;margin-top:.3rem" id="regBtn">Crear cuenta</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+let session = JSON.parse(localStorage.getItem('periochi_session') || 'null');
+let ptsData = null;
+let ordersData = [];
+
+function h(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function fmtCOP(n) { return Number(n||0).toLocaleString('es-CO'); }
+function fmtDate(s) { return new Date(s+'Z').toLocaleDateString('es-CO',{year:'numeric',month:'short',day:'numeric'}); }
+
+function hdrs() {
+  const r = {'Content-Type':'application/json'};
+  if (session?.token) r['Authorization'] = 'Bearer ' + session.token;
+  return r;
+}
+
+function saveSession(d) { session = d; localStorage.setItem('periochi_session', JSON.stringify(d)); }
+function clearSession() { session = null; localStorage.removeItem('periochi_session'); }
+
+/* ── PANEL ROUTING ── */
+function showPanel(name) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.acct-nav-item').forEach(b => b.classList.remove('active'));
+  document.getElementById('panel-'+name).classList.add('active');
+  const btns = document.querySelectorAll('.acct-nav-item');
+  const idx = ['pts','orders','profile'].indexOf(name);
+  if (idx >= 0) btns[idx].classList.add('active');
+  if (name === 'pts' && !ptsData) loadPoints();
+  if (name === 'orders' && !ordersData.length) loadOrders();
+  if (name === 'profile') fillProfile();
+}
+
+/* ── LAYOUT SWITCH ── */
+function showAccount() {
+  document.getElementById('loginGate').style.display = 'none';
+  document.getElementById('accountLayout').style.display = 'block';
+  fillSidebar();
+  loadPoints();
+}
+
+function fillSidebar() {
+  if (!session?.user) return;
+  const u = session.user;
+  document.getElementById('sideAvatar').textContent = (u.name||'P')[0].toUpperCase();
+  document.getElementById('sideName').textContent = u.name;
+  document.getElementById('sideEmail').textContent = u.email;
+  document.getElementById('sidePts').textContent = (u.points||0).toLocaleString('es-CO');
+}
+
+/* ── POINTS ── */
+async function loadPoints() {
+  try {
+    const res = await fetch('/api/account/points', { headers: hdrs() });
+    if (!res.ok) return;
+    ptsData = await res.json();
+    renderPoints();
+  } catch {}
+}
+
+function renderPoints() {
+  if (!ptsData) return;
+  const bal = ptsData.balance || 0;
+  document.getElementById('ptsBalance').textContent = bal.toLocaleString('es-CO');
+  const redeemVal = Math.floor(bal / 100) * 1000;
+  document.getElementById('ptsRedeemVal').textContent = `Equivalen a $${fmtCOP(redeemVal)} COP en descuentos`;
+
+  // stats from history
+  let earned = 0, redeemed = 0;
+  for (const l of ptsData.history) {
+    if (l.delta > 0) earned += l.delta;
+    else redeemed += Math.abs(l.delta);
+  }
+  document.getElementById('statEarned').textContent = earned.toLocaleString('es-CO');
+  document.getElementById('statRedeemed').textContent = redeemed.toLocaleString('es-CO');
+
+  // history
+  const el = document.getElementById('ptsHistoryList');
+  if (!ptsData.history.length) {
+    el.innerHTML = `<div class="pts-empty">Aún no tienes movimientos de puntos.<br>¡Haz tu primera compra para empezar!</div>`;
+    return;
+  }
+  el.innerHTML = ptsData.history.map(l => `
+    <div class="pts-log-item">
+      <div class="pts-log-dot ${l.delta > 0 ? 'pts-log-dot--pos' : 'pts-log-dot--neg'}"></div>
+      <div class="pts-log-info">
+        <div class="pts-log-reason">${h(l.reason)}</div>
+        <div class="pts-log-date">${fmtDate(l.created_at)} · Saldo: ${(l.balance_after||0).toLocaleString('es-CO')} pts</div>
+      </div>
+      <div class="pts-log-delta ${l.delta > 0 ? 'pts-log-delta--pos' : 'pts-log-delta--neg'}">${l.delta > 0 ? '+' : ''}${l.delta.toLocaleString('es-CO')}</div>
+    </div>`).join('');
+}
+
+/* ── ORDERS ── */
+async function loadOrders() {
+  const el = document.getElementById('ordersList');
+  try {
+    const res = await fetch('/api/account/orders', { headers: hdrs() });
+    if (!res.ok) return;
+    ordersData = await res.json();
+
+    // update orders stat
+    document.getElementById('statOrders').textContent = ordersData.length;
+
+    if (!ordersData.length) {
+      el.innerHTML = `<div style="text-align:center;padding:3rem;color:var(--gris)"><p>Aún no tienes pedidos.</p><a href="/tienda.html" class="btn btn--verde" style="margin-top:1rem;display:inline-flex">Ir a la tienda</a></div>`;
+      return;
+    }
+    el.innerHTML = ordersData.map(o => `
+      <div class="order-card">
+        <div class="order-card__head">
+          <div>
+            <div class="order-card__num">Pedido #${o.id}</div>
+            <div class="order-card__date">${fmtDate(o.created_at)}</div>
+          </div>
+          <span class="order-status status--${h(o.status)}">${h(o.status)}</span>
+        </div>
+        <div class="order-card__body">
+          ${o.items.map(i => `
+            <div class="order-item-row">
+              <span>${h(i.name)} × ${i.qty}</span>
+              <span>$${fmtCOP(i.price * i.qty)}</span>
+            </div>`).join('')}
+        </div>
+        <div class="order-card__foot">
+          <span class="order-card__total">Total: $${fmtCOP(o.total)}</span>
+          ${o.points_earned > 0 ? `<span class="order-card__pts">✦ +${o.points_earned} pts ganados</span>` : ''}
+        </div>
+      </div>`).join('');
+  } catch {
+    el.innerHTML = `<div style="text-align:center;color:var(--rojo);padding:2rem">Error al cargar pedidos</div>`;
+  }
+}
+
+/* ── PROFILE ── */
+function fillProfile() {
+  if (!session?.user) return;
+  document.getElementById('profName').value = session.user.name || '';
+  document.getElementById('profEmail').value = session.user.email || '';
+  document.getElementById('profSince').value = session.user.created_at ? fmtDate(session.user.created_at) : '—';
+}
+
+async function updateProfile() {
+  const name = document.getElementById('profName').value.trim();
+  const msgEl = document.getElementById('profileMsg');
+  if (!name) { msgEl.innerHTML = `<div class="form-msg form-msg--err">El nombre no puede estar vacío</div>`; return; }
+  // Simple optimistic update (no dedicated endpoint yet — placeholder)
+  session.user.name = name;
+  saveSession(session);
+  fillSidebar();
+  msgEl.innerHTML = `<div class="form-msg form-msg--ok">Perfil actualizado ✓</div>`;
+  setTimeout(() => msgEl.innerHTML = '', 3000);
+}
+
+/* ── LOGOUT ── */
+function doLogout() {
+  clearSession();
+  window.location.reload();
+}
+
+/* ── AUTH ── */
+function openAuth(tab = 'login') {
+  document.getElementById('authModal').classList.add('open');
+  switchTab(tab);
+}
+function closeAuth() { document.getElementById('authModal').classList.remove('open'); }
+
+function switchTab(t) {
+  document.getElementById('loginForm').style.display = t === 'login' ? '' : 'none';
+  document.getElementById('registerForm').style.display = t === 'register' ? '' : 'none';
+  document.getElementById('tabLogin').classList.toggle('active', t === 'login');
+  document.getElementById('tabRegister').classList.toggle('active', t === 'register');
+  document.getElementById('authMsg').innerHTML = '';
+}
+
+function setAuthMsg(msg, ok) {
+  document.getElementById('authMsg').innerHTML = `<div class="form-msg form-msg--${ok?'ok':'err'}">${h(msg)}</div>`;
+}
+
+async function doLogin(e) {
+  e.preventDefault();
+  const btn = document.getElementById('loginBtn');
+  btn.disabled = true; btn.textContent = 'Ingresando...';
+  try {
+    const res = await fetch('/api/auth/login', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({ email: document.getElementById('loginEmail').value, password: document.getElementById('loginPass').value }) });
+    const data = await res.json();
+    if (!res.ok) { setAuthMsg(data.error, false); return; }
+    saveSession(data);
+    closeAuth();
+    showAccount();
+  } catch { setAuthMsg('Error de conexión', false); }
+  finally { btn.disabled = false; btn.textContent = 'Ingresar'; }
+}
+
+async function doRegister(e) {
+  e.preventDefault();
+  const btn = document.getElementById('regBtn');
+  btn.disabled = true; btn.textContent = 'Creando cuenta...';
+  try {
+    const res = await fetch('/api/auth/register', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({ name: document.getElementById('regName').value, email: document.getElementById('regEmail').value, password: document.getElementById('regPass').value }) });
+    const data = await res.json();
+    if (!res.ok) { setAuthMsg(data.error, false); return; }
+    saveSession(data);
+    closeAuth();
+    showAccount();
+  } catch { setAuthMsg('Error de conexión', false); }
+  finally { btn.disabled = false; btn.textContent = 'Crear cuenta'; }
+}
+
+/* ── INIT ── */
+(async () => {
+  if (session?.token) {
+    try {
+      const res = await fetch('/api/account/me', { headers: hdrs() });
+      if (res.ok) { session.user = await res.json(); saveSession(session); showAccount(); }
+      else { clearSession(); showGate(); }
+    } catch { showGate(); }
+  } else { showGate(); }
+})();
+
+function showGate() { document.getElementById('loginGate').style.display = 'block'; }
+
+// Handle URL hash for deep linking to panels
+const hash = window.location.hash.replace('#','');
+if (['pts','orders','profile'].includes(hash)) {
+  window.addEventListener('DOMContentLoaded', () => { if (session) showPanel(hash); });
+}
+</script>
+
+<!-- FOOTER -->
+<footer class="site-footer">
+  <div class="site-footer__grid">
+    <div>
+      <a href="/"><img src="/logo_largo.png" alt="PERIOCHI" height="38" style="filter:brightness(0) invert(1);opacity:.92;"></a>
+      <div class="site-footer__social">
+        <a class="social-btn" href="#" aria-label="Instagram">
+          <svg viewBox="0 0 40 40"><rect x="6" y="10" width="28" height="22" rx="6" fill="none" stroke="currentColor" stroke-width="2.4"/><circle cx="20" cy="21" r="6" fill="none" stroke="currentColor" stroke-width="2.4"/><circle cx="28" cy="15" r="1.6" fill="currentColor"/></svg>
+        </a>
+        <a class="social-btn" href="#" aria-label="Facebook">
+          <svg viewBox="0 0 40 40"><path d="M6,8 L34,8 L34,26 L18,26 L10,34 L10,26 L6,26 Z" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"/></svg>
+        </a>
+        <a class="social-btn" href="#" aria-label="TikTok">
+          <svg viewBox="0 0 40 40"><circle cx="13" cy="30" r="5" fill="none" stroke="currentColor" stroke-width="2.4"/><path d="M18,30 L18,8 L32,5 L32,26" fill="none" stroke="currentColor" stroke-width="2.4"/><circle cx="27" cy="26" r="5" fill="none" stroke="currentColor" stroke-width="2.4"/></svg>
+        </a>
+      </div>
+    </div>
+    <div class="site-footer__cta">
+      <h3>¿Hablemos?</h3>
+      <p>Construyamos valor juntos.</p>
+      <a href="mailto:hola@periochi.co" class="btn btn--terracota">Contáctanos</a>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:.6rem;font-size:.84rem;opacity:.75;">
+      <a href="/" style="color:var(--crema);transition:opacity .2s" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='.75'">Inicio</a>
+      <a href="/tienda.html" style="color:var(--crema);transition:opacity .2s" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='.75'">Tienda</a>
+      <a href="/cuenta.html" style="color:var(--crema);transition:opacity .2s" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='.75'">Mi Cuenta</a>
+    </div>
+  </div>
+  <div class="site-footer__bottom">
+    <span>© 2026 Periochi — Café de Origen</span>
+    <span>Hecho en las montañas de Colombia</span>
+  </div>
+</footer>
+</body>
+</html>

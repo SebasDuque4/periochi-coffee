@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PERIOCHI — Café de Origen</title>
+<meta name="description" content="PERIOCHI. Café de origen colombiano. Legado de la tierra.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;0,9..144,700;0,9..144,900&family=Archivo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --crema:#F4E9D2; --crema-2:#ECDEBE; --crema-3:#E3D2AA;
+  --verde:#1F3327; --verde-2:#2C4536;
+  --terracota:#CC5A2C; --rojo:#A23B24;
+  --mostaza:#D9A02C; --gris:#5B5B4C;
+  --display:'Fraunces',serif; --sans:'Archivo',sans-serif;
+  --container:1260px; --edge:clamp(1.25rem,4vw,4rem);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{font-family:var(--sans);background:var(--crema);color:var(--verde);line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden;}
+img,svg{display:block;max-width:100%;}
+a{color:inherit;text-decoration:none;}
+ul{list-style:none;}
+button{font-family:inherit;background:none;border:none;cursor:pointer;color:inherit;}
+::selection{background:var(--terracota);color:var(--crema);}
+button:focus-visible,a:focus-visible{outline:3px solid var(--mostaza);outline-offset:3px;border-radius:2px;}
+.wrap{max-width:var(--container);margin:0 auto;padding-inline:var(--edge);}
+
+.label{font-family:var(--sans);font-weight:700;font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;}
+.link-mas{font-family:var(--sans);font-weight:700;font-size:.74rem;letter-spacing:.08em;text-transform:uppercase;color:var(--terracota);border-bottom:1.5px solid var(--terracota);padding-bottom:3px;display:inline-flex;gap:.4em;transition:opacity .2s ease;}
+.link-mas:hover{opacity:.7;}
+
+.btn{font-family:var(--sans);font-weight:700;font-size:.76rem;letter-spacing:.07em;text-transform:uppercase;padding:.95rem 1.7rem;border-radius:3px;display:inline-flex;align-items:center;gap:.6rem;transition:transform .2s ease,background .2s ease,color .2s ease;}
+.btn:hover{transform:translateY(-2px);}
+.btn--verde{background:var(--verde);color:var(--crema);}
+.btn--verde:hover{background:var(--verde-2);}
+.btn--terracota{background:var(--terracota);color:var(--crema);}
+.btn--terracota:hover{background:var(--rojo);}
+.btn--outline{border:1.5px solid currentColor;background:transparent;}
+.btn--outline:hover{background:currentColor;}
+.btn--outline:hover span{color:var(--crema);}
+
+/* placeholder slots */
+.illus-slot{position:relative;background-image:repeating-linear-gradient(135deg,var(--crema-2) 0 16px,var(--crema-3) 16px 32px);border:2px dashed rgba(31,51,39,.38);border-radius:12px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:.6rem;padding:1.4rem;min-height:160px;color:var(--verde);overflow:hidden;}
+.illus-slot__icon{width:34px;height:34px;opacity:.55;}
+.illus-slot__label{font-family:var(--sans);font-weight:700;font-size:.68rem;letter-spacing:.06em;text-transform:uppercase;opacity:.62;max-width:26ch;line-height:1.45;}
+.illus-slot__dim{font-size:.62rem;opacity:.48;letter-spacing:.04em;}
+
+/* HEADER STICKY */
+.site-header{position:sticky;top:0;z-index:500;}
+
+/* NAV */
+.nav{display:flex;align-items:center;justify-content:space-between;padding:1.1rem var(--edge);background:rgba(244,233,210,.92);backdrop-filter:blur(6px);transition:background .35s ease,box-shadow .35s ease,padding .3s ease;}
+.nav.is-scrolled{background:rgba(244,233,210,.98);box-shadow:0 6px 20px rgba(31,51,39,.08);padding:.75rem var(--edge);}
+.logo{display:flex;align-items:center;}
+.logo img{height:38px;width:auto;display:block;}
+.logo--footer img{height:42px;filter:brightness(0) invert(1);opacity:.92;}
+.nav__links{display:flex;gap:1.9rem;}
+.nav__links a{font-family:var(--sans);font-weight:700;font-size:.74rem;letter-spacing:.08em;text-transform:uppercase;color:var(--verde);position:relative;padding-bottom:4px;}
+.nav__links a::after{content:"";position:absolute;left:0;bottom:0;height:1.5px;width:0;background:var(--terracota);transition:width .25s ease;}
+.nav__links a:hover::after{width:100%;}
+.nav__right{display:flex;align-items:center;gap:1.1rem;}
+.nav__bag{width:21px;height:21px;color:var(--verde);}
+.nav__burger{display:none;flex-direction:column;gap:5px;width:24px;}
+.nav__burger span{height:2px;background:var(--verde);border-radius:2px;}
+.mobile-menu{position:fixed;inset:0;background:var(--verde);color:var(--crema);z-index:600;display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:1.3rem;padding:2.4rem var(--edge);transform:translateY(-100%);transition:transform .4s ease;}
+.mobile-menu.is-open{transform:translateY(0);}
+.mobile-menu a{font-family:var(--sans);font-weight:800;font-size:1.7rem;letter-spacing:.02em;}
+.mobile-menu__close{position:absolute;top:1.4rem;right:var(--edge);font-family:var(--sans);font-weight:700;font-size:.78rem;letter-spacing:.1em;}
+
+/* HERO */
+.hero{position:relative;padding-top:5.5rem;}
+.hero .illus-slot{border-radius:0;border-left:none;border-right:none;min-height:640px;}
+.hero__text{position:absolute;top:50%;left:0;transform:translateY(-58%);max-width:480px;padding:0 var(--edge);z-index:3;display:flex;flex-direction:column;gap:1.2rem;}
+.hero__eye{width:30px;height:30px;color:var(--terracota);}
+.hero h1{font-family:var(--sans);font-weight:900;font-size:clamp(2.1rem,4.4vw,3rem);line-height:1.08;letter-spacing:-.01em;}
+.hero h1 .l2{color:var(--terracota);display:block;}
+.hero__sub{font-size:1rem;color:var(--gris);max-width:30ch;}
+.hero__cta{margin-top:.4rem;display:flex;gap:.8rem;flex-wrap:wrap;}
+.scroll-chevron{position:absolute;bottom:1.6rem;left:var(--edge);z-index:3;width:30px;height:30px;color:var(--verde);animation:bob 1.8s ease-in-out infinite;}
+@keyframes bob{0%,100%{transform:translateY(0);}50%{transform:translateY(6px);}}
+
+/* puntos promo banner */
+.puntos-banner{background:var(--mostaza);color:var(--verde);text-align:center;padding:.75rem var(--edge);font-family:var(--sans);font-weight:700;font-size:.8rem;letter-spacing:.06em;text-transform:uppercase;}
+.puntos-banner a{text-decoration:underline;text-underline-offset:3px;}
+
+/* FEATURES */
+.features{padding:5rem 0;background:var(--crema);border-bottom:1px solid rgba(31,51,39,.1);}
+.features__grid{display:grid;grid-template-columns:repeat(4,1fr);gap:0;}
+.feature{padding:0 1.6rem;border-left:1px solid rgba(31,51,39,.14);display:flex;flex-direction:column;gap:1rem;}
+.feature:first-child{border-left:none;padding-left:0;}
+.feature .illus-slot{width:84px;height:84px;min-height:0;border-radius:50%;padding:0;}
+.feature .illus-slot__icon{width:26px;height:26px;}
+.feature h3{font-family:var(--sans);font-weight:800;font-size:1rem;letter-spacing:.03em;text-transform:uppercase;}
+.feature p{font-size:.92rem;color:var(--gris);max-width:30ch;}
+
+/* SECTION TITLE */
+.section-title{text-align:center;margin-bottom:3.2rem;}
+.section-title__row{display:flex;align-items:center;justify-content:center;gap:.9rem;}
+.section-title__row svg{width:18px;height:18px;color:var(--terracota);opacity:.8;}
+.section-title h2{font-family:var(--sans);font-weight:900;font-size:clamp(1.5rem,3vw,2.1rem);letter-spacing:.02em;text-transform:uppercase;}
+.section-title__rule{width:46px;height:3px;background:var(--terracota);margin:.7rem auto 0;border-radius:2px;}
+
+/* CAFÉS */
+.cafes{padding:6rem 0;background:var(--crema-2);}
+.cafes__grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.8rem;}
+.cafe-card{background:var(--crema);border-radius:10px;overflow:hidden;box-shadow:0 14px 34px rgba(31,51,39,.1);display:flex;flex-direction:column;}
+.cafe-card__head{padding:.85rem 1rem;text-align:center;}
+.cafe-card__head span{font-family:var(--sans);font-weight:800;font-size:.92rem;letter-spacing:.1em;text-transform:uppercase;color:var(--crema);}
+.cafe-card--verde .cafe-card__head{background:var(--verde);}
+.cafe-card--rojo .cafe-card__head{background:var(--rojo);}
+.cafe-card--mostaza .cafe-card__head{background:var(--mostaza);}
+.cafe-card .illus-slot{aspect-ratio:4/5;border-radius:0;border-left:none;border-right:none;border-top:none;}
+.cafe-card__body{padding:1.5rem 1.4rem 1.8rem;display:flex;flex-direction:column;align-items:center;gap:1.1rem;text-align:center;flex:1;}
+.cafe-card__body p{font-size:.92rem;color:var(--gris);max-width:26ch;}
+.cafe-card .btn{margin-top:auto;}
+.cafe-card--verde .btn{color:var(--verde);}
+.cafe-card--rojo .btn{color:var(--rojo);}
+.cafe-card--mostaza .btn{color:var(--mostaza);}
+
+/* MANIFIESTO */
+.manifiesto{position:relative;background:var(--verde);color:var(--crema);padding:5.5rem 0;overflow:hidden;}
+.manifiesto__grid{display:grid;grid-template-columns:1.05fr 1fr;gap:3rem;align-items:center;position:relative;z-index:2;}
+.manifiesto h2{font-family:var(--display);font-weight:800;font-size:clamp(1.8rem,3.4vw,2.5rem);margin-bottom:1.4rem;}
+.manifiesto__lines p{font-size:1.04rem;opacity:.92;margin-bottom:.3rem;}
+.manifiesto .link-mas{color:var(--terracota);margin-top:1.4rem;display:inline-flex;}
+.manifiesto__ornaments{position:absolute;inset:0;z-index:1;pointer-events:none;}
+.manifiesto__ornaments svg{position:absolute;width:30px;height:30px;color:var(--mostaza);opacity:.55;}
+.manifiesto .illus-slot{min-height:280px;background-image:repeating-linear-gradient(135deg,rgba(244,233,210,.1) 0 16px,rgba(244,233,210,.16) 16px 32px);border-color:rgba(244,233,210,.4);color:var(--crema);}
+
+/* COMPROMETIDOS */
+.comprometidos{padding:6rem 0;background:var(--crema);}
+.comprometidos__grid{display:grid;grid-template-columns:repeat(5,1fr);gap:1.6rem;text-align:center;}
+.compromiso-item{display:flex;flex-direction:column;align-items:center;gap:1rem;}
+.compromiso-item .illus-slot{width:74px;height:74px;min-height:0;border-radius:50%;padding:0;}
+.compromiso-item h3{font-family:var(--sans);font-weight:800;font-size:.85rem;letter-spacing:.04em;text-transform:uppercase;}
+.compromiso-item p{font-size:.86rem;color:var(--gris);}
+
+/* FOOTER */
+.footer{position:relative;background:var(--verde);color:var(--crema);padding:4.5rem 0 2.4rem;overflow:hidden;}
+.footer__grid{display:grid;grid-template-columns:.9fr 1.1fr 1fr;gap:2.5rem;align-items:center;position:relative;z-index:2;}
+.footer__logo .logo__word{color:var(--crema);font-size:1.7rem;}
+.footer__logo .logo__tag{color:var(--crema);opacity:.75;}
+.footer__social{display:flex;gap:.7rem;margin-top:1.3rem;}
+.social-btn{width:34px;height:34px;border-radius:50%;border:1.4px solid rgba(244,233,210,.55);display:flex;align-items:center;justify-content:center;transition:background .2s ease,border-color .2s ease;}
+.social-btn:hover{background:rgba(244,233,210,.12);border-color:var(--crema);}
+.social-btn svg{width:15px;height:15px;color:var(--crema);}
+.footer__cta h3{font-family:var(--sans);font-weight:800;font-size:1.5rem;}
+.footer__cta p{opacity:.85;margin:.4rem 0 1.2rem;}
+.footer .illus-slot{min-height:200px;background-image:repeating-linear-gradient(135deg,rgba(244,233,210,.1) 0 16px,rgba(244,233,210,.16) 16px 32px);border-color:rgba(244,233,210,.4);color:var(--crema);}
+.footer__bottom{margin-top:3rem;padding-top:1.6rem;border-top:1px solid rgba(244,233,210,.18);display:flex;justify-content:space-between;flex-wrap:wrap;gap:.6rem;font-size:.72rem;opacity:.6;letter-spacing:.04em;}
+
+.reveal{opacity:0;transform:translateY(24px);transition:opacity .7s ease,transform .7s ease;}
+.reveal.is-visible{opacity:1;transform:translateY(0);}
+
+@media(prefers-reduced-motion:reduce){*{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important;}html{scroll-behavior:auto;}}
+
+@media(max-width:980px){
+  .nav__links{display:none;} .nav__burger{display:flex;}
+  .features__grid{grid-template-columns:repeat(2,1fr);row-gap:2.6rem;}
+  .feature{border-left:none;padding-left:0;}
+  .cafes__grid{grid-template-columns:1fr;max-width:420px;margin-inline:auto;}
+  .manifiesto__grid{grid-template-columns:1fr;}
+  .comprometidos__grid{grid-template-columns:repeat(2,1fr);row-gap:2.4rem;}
+  .footer__grid{grid-template-columns:1fr;gap:2.4rem;text-align:center;}
+  .footer__social{justify-content:center;}
+  .hero .illus-slot{min-height:560px;}
+  .hero__text{position:relative;transform:none;top:auto;max-width:100%;padding:2.4rem var(--edge) 2rem;}
+}
+@media(max-width:620px){
+  .features__grid{grid-template-columns:1fr;}
+  .comprometidos__grid{grid-template-columns:1fr;}
+  .footer__bottom{flex-direction:column;text-align:center;}
+}
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+<defs>
+  <symbol id="ico-imagen" viewBox="0 0 64 64"><rect x="6" y="10" width="52" height="44" rx="4" fill="none" stroke="currentColor" stroke-width="3"/><circle cx="22" cy="26" r="5" fill="none" stroke="currentColor" stroke-width="3"/><path d="M10,48 L24,34 L34,42 L46,28 L58,40" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="ico-espiral" viewBox="0 0 40 40"><path d="M20,4 C32,4 36,14 30,22 C25,29 14,27 14,19 C14,13 21,11 24,16" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round"/></symbol>
+  <symbol id="ico-bag" viewBox="0 0 40 40"><path d="M10,14 L30,14 L28,34 L12,34 Z" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linejoin="round"/><path d="M15,14 C15,8 25,8 25,14" fill="none" stroke="currentColor" stroke-width="2.6"/></symbol>
+  <symbol id="ico-chevron" viewBox="0 0 40 24"><path d="M4,4 L20,20 L36,4" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="ico-ojo" viewBox="0 0 60 40"><path d="M4,20 C16,4 44,4 56,20 C44,36 16,36 4,20 Z" fill="none" stroke="currentColor" stroke-width="3"/><circle cx="30" cy="20" r="6.5" fill="currentColor"/></symbol>
+  <symbol id="ico-estrella" viewBox="0 0 40 40"><path d="M20,2 L24,17 L38,20 L24,23 L20,38 L16,23 L2,20 L16,17 Z" fill="currentColor"/></symbol>
+  <symbol id="ico-sol" viewBox="0 0 40 40"><circle cx="20" cy="20" r="9" fill="none" stroke="currentColor" stroke-width="2.6"/><g stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><line x1="20" y1="2" x2="20" y2="7"/><line x1="20" y1="33" x2="20" y2="38"/><line x1="2" y1="20" x2="7" y2="20"/><line x1="33" y1="20" x2="38" y2="20"/><line x1="7" y1="7" x2="10.5" y2="10.5"/><line x1="29.5" y1="29.5" x2="33" y2="33"/><line x1="33" y1="7" x2="29.5" y2="10.5"/><line x1="10.5" y1="29.5" x2="7" y2="33"/></g></symbol>
+  <symbol id="ico-camara" viewBox="0 0 40 40"><rect x="6" y="10" width="28" height="22" rx="6" fill="none" stroke="currentColor" stroke-width="2.4"/><circle cx="20" cy="21" r="6" fill="none" stroke="currentColor" stroke-width="2.4"/><circle cx="28" cy="15" r="1.6" fill="currentColor"/></symbol>
+  <symbol id="ico-mensaje" viewBox="0 0 40 40"><path d="M6,8 L34,8 L34,26 L18,26 L10,34 L10,26 L6,26 Z" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"/></symbol>
+  <symbol id="ico-nota" viewBox="0 0 40 40"><circle cx="13" cy="30" r="5" fill="none" stroke="currentColor" stroke-width="2.4"/><path d="M18,30 L18,8 L32,5 L32,26" fill="none" stroke="currentColor" stroke-width="2.4"/><circle cx="27" cy="26" r="5" fill="none" stroke="currentColor" stroke-width="2.4"/></symbol>
+</defs>
+</svg>
+
+<div class="site-header">
+<!-- Banner puntos -->
+<div class="puntos-banner">
+  ✦ Gana puntos en cada compra y canjéalos por descuentos — <a href="/tienda.html">Conoce los Puntos Periochi →</a>
+</div>
+
+<!-- NAV -->
+<nav class="nav" id="nav">
+  <a href="/" class="logo">
+    <img src="/logo_largo.png" alt="PERIOCHI — Café de Origen" height="38">
+  </a>
+  <ul class="nav__links">
+    <li><a href="#origen">Origen</a></li>
+    <li><a href="#cafe">Cafés</a></li>
+    <li><a href="#nosotros">Nosotros</a></li>
+    <li><a href="#manifiesto">Manifiesto</a></li>
+    <li><a href="/tienda.html">Tienda</a></li>
+    <li><a href="#contacto">Contacto</a></li>
+  </ul>
+  <div class="nav__right">
+    <a href="/tienda.html" aria-label="Ir a la tienda"><svg class="nav__bag" viewBox="0 0 40 40"><use href="#ico-bag"/></svg></a>
+    <button class="nav__burger" id="burgerBtn" aria-label="Abrir menú"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+</div><!-- /.site-header -->
+
+<div class="mobile-menu" id="mobileMenu">
+  <button class="mobile-menu__close" id="closeMenu">CERRAR ✕</button>
+  <a href="#origen">Origen</a>
+  <a href="#cafe">Cafés</a>
+  <a href="#nosotros">Nosotros</a>
+  <a href="#manifiesto">Manifiesto</a>
+  <a href="/tienda.html">Tienda</a>
+  <a href="#contacto">Contacto</a>
+</div>
+
+<!-- HERO -->
+<header class="hero" id="hero">
+  <div class="illus-slot">
+    <svg class="illus-slot__icon" viewBox="0 0 64 64"><use href="#ico-imagen"/></svg>
+    <span class="illus-slot__label">Ilustración hero — mujer cafetera, montañas, tucán y cafetal</span>
+    <span class="illus-slot__dim">Panorámica · ancho completo</span>
+  </div>
+  <div class="hero__text">
+    <svg class="hero__eye" viewBox="0 0 60 40"><use href="#ico-ojo"/></svg>
+    <h1>CAFÉ DE ORIGEN.<span class="l2">LEGADO DE LA TIERRA.</span></h1>
+    <p class="hero__sub">Cada taza cuenta una historia que comenzó mucho antes de nosotros.</p>
+    <div class="hero__cta">
+      <a href="#origen" class="btn btn--verde">Conoce nuestra historia</a>
+      <a href="/tienda.html" class="btn btn--terracota">Ir a la tienda</a>
+    </div>
+  </div>
+  <svg class="scroll-chevron" viewBox="0 0 40 24"><use href="#ico-chevron"/></svg>
+</header>
+
+<!-- FEATURES -->
+<section class="features reveal" id="origen">
+  <div class="wrap features__grid">
+    <div class="feature">
+      <div class="illus-slot"><svg class="illus-slot__icon" viewBox="0 0 64 64"><use href="#ico-imagen"/></svg></div>
+      <h3>El Origen</h3>
+      <p>Nacimos en las montañas colombianas, donde la tierra, el clima y las manos expertas dan vida a un café único.</p>
+      <a href="#" class="link-mas">Descubrir más →</a>
+    </div>
+    <div class="feature">
+      <div class="illus-slot"><svg class="illus-slot__icon" viewBox="0 0 64 64"><use href="#ico-imagen"/></svg></div>
+      <h3>Nuestra Esencia</h3>
+      <p>Honramos nuestras raíces y cultura, conectando lo ancestral con lo que somos hoy.</p>
+      <a href="#" class="link-mas">Descubrir más →</a>
+    </div>
+    <div class="feature">
+      <div class="illus-slot"><svg class="illus-slot__icon" viewBox="0 0 64 64"><use href="#ico-imagen"/></svg></div>
+      <h3>Nuestro Café</h3>
+      <p>Café de especialidad, seleccionado, cultivado y procesado con cuidado excepcional.</p>
+      <a href="#" class="link-mas">Descubrir más →</a>
+    </div>
+    <div class="feature">
+      <div class="illus-slot"><svg class="illus-slot__icon" viewBox="0 0 64 64"><use href="#ico-imagen"/></svg></div>
+      <h3>Experiencia</h3>
+      <p>Más que una bebida, una experiencia que despierta los sentidos y crea memoria.</p>
+      <a href="#" class="link-mas">Descubrir más →</a>
+    </div>
+  </div>
+</section>
+
+<!-- NUESTROS CAFÉS -->
+<section class="cafes reveal" id="cafe">
+  <div class="wrap">
+    <div class="section-title">
+      <div class="section-title__row">
+        <svg viewBox="0 0 40 40"><use href="#ico-espiral"/></svg>
+        <h2>Nuestros Cafés</h2>
+        <svg viewBox="0 0 40 40"><use href="#ico-espiral"/></svg>
+      </div>
+      <div class="section-title__rule"></div>
+    </div>
+    <div class="cafes__grid">
+      <div class="cafe-card cafe-card--verde">
+        <div class="cafe-card__head"><span>Tradición</span></div>
+        <div class="illus-slot"><svg class="illus-slot__icon" viewBox="0 0 64 64"><use href="#ico-imagen"/></svg><span class="illus-slot__label">Mujer cosechera, cafetal</span></div>
+        <div class="cafe-card__body">
+          <p>Notas dulces, cuerpo balanceado y aroma floral.</p>
+          <a href="/tienda.html" class="btn btn--outline"><span>Ver café</span></a>
+        </div>
+      </div>
+      <div class="cafe-card cafe-card--rojo">
+        <div class="cafe-card__head"><span>Reserva</span></div>
+        <div class="illus-slot"><svg class="illus-slot__icon" viewBox="0 0 64 64"><use href="#ico-imagen"/></svg><span class="illus-slot__label">Caficultor, montañas</span></div>
+        <div class="cafe-card__body">
+          <p>Notas a chocolate, caramelo y frutos secos.</p>
+          <a href="/tienda.html" class="btn btn--outline"><span>Ver café</span></a>
+        </div>
+      </div>
+      <div class="cafe-card cafe-card--mostaza">
+        <div class="cafe-card__head"><span>Especial</span></div>
+        <div class="illus-slot"><svg class="illus-slot__icon" viewBox="0 0 64 64"><use href="#ico-imagen"/></svg><span class="illus-slot__label">Colibrí y flor de café</span></div>
+        <div class="cafe-card__body">
+          <p>Notas frutales, acidez vibrante y final prolongado.</p>
+          <a href="/tienda.html" class="btn btn--outline"><span>Ver café</span></a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MANIFIESTO -->
+<section class="manifiesto reveal" id="manifiesto">
+  <div class="manifiesto__ornaments">
+    <svg viewBox="0 0 40 40" style="top:8%;left:46%;"><use href="#ico-espiral"/></svg>
+    <svg viewBox="0 0 40 40" style="top:30%;left:52%;"><use href="#ico-estrella"/></svg>
+    <svg viewBox="0 0 60 40" style="top:48%;left:44%;width:34px;height:24px;"><use href="#ico-ojo"/></svg>
+    <svg viewBox="0 0 40 40" style="top:64%;left:53%;"><use href="#ico-sol"/></svg>
+  </div>
+  <div class="wrap manifiesto__grid">
+    <div>
+      <h2>Manifiesto</h2>
+      <div class="manifiesto__lines">
+        <p>No creemos en el café sin historia.</p>
+        <p>Creemos en las manos que cultivan.</p>
+        <p>Creemos en el tiempo.</p>
+        <p>Creemos en la tierra.</p>
+        <p>Creemos en lo auténtico.</p>
+        <p>Creemos en el legado.</p>
+      </div>
+      <a href="#" class="link-mas">Leer manifiesto completo →</a>
+    </div>
+    <div class="illus-slot">
+      <svg class="illus-slot__icon" viewBox="0 0 64 64"><use href="#ico-imagen"/></svg>
+      <span class="illus-slot__label">Manos sosteniendo cerezas de café</span>
+    </div>
+  </div>
+</section>
+
+<!-- COMPROMETIDOS -->
+<section class="comprometidos reveal" id="nosotros">
+  <div class="wrap">
+    <div class="section-title">
+      <div class="section-title__row">
+        <svg viewBox="0 0 40 40"><use href="#ico-espiral"/></svg>
+        <h2>Comprometidos Con</h2>
+        <svg viewBox="0 0 40 40"><use href="#ico-espiral"/></svg>
+      </div>
+      <div class="section-title__rule"></div>
+    </div>
+    <div class="comprometidos__grid">
+      <div class="compromiso-item"><div class="illus-slot"><svg class="illus-slot__icon" viewBox="0 0 64 64"><use href="#ico-imagen"/></svg></div><h3>La Tierra</h3><p>Prácticas sostenibles que protegen nuestro entorno.</p></div>
+      <div class="compromiso-item"><div class="illus-slot"><svg class="illus-slot__icon" viewBox="0 0 64 64"><use href="#ico-imagen"/></svg></div><h3>Las Personas</h3><p>Relaciones justas y bienestar para nuestras comunidades.</p></div>
+      <div class="compromiso-item"><div class="illus-slot"><svg class="illus-slot__icon" viewBox="0 0 64 64"><use href="#ico-imagen"/></svg></div><h3>La Calidad</h3><p>Excelencia en cada proceso, del cultivo a tu taza.</p></div>
+      <div class="compromiso-item"><div class="illus-slot"><svg class="illus-slot__icon" viewBox="0 0 64 64"><use href="#ico-imagen"/></svg></div><h3>La Cultura</h3><p>Valoramos nuestras raíces y las historias que nos conectan.</p></div>
+      <div class="compromiso-item"><div class="illus-slot"><svg class="illus-slot__icon" viewBox="0 0 64 64"><use href="#ico-imagen"/></svg></div><h3>El Futuro</h3><p>Construimos hoy el legado que queremos dejar mañana.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer" id="contacto">
+  <div class="wrap footer__grid">
+    <div class="footer__logo">
+      <a href="/" class="logo logo--footer">
+        <img src="/logo_corto.png" alt="PERIOCHI" height="100">
+      </a>
+      <div class="footer__social">
+        <a class="social-btn" href="#" aria-label="Instagram"><svg viewBox="0 0 40 40"><use href="#ico-camara"/></svg></a>
+        <a class="social-btn" href="#" aria-label="Facebook"><svg viewBox="0 0 40 40"><use href="#ico-mensaje"/></svg></a>
+        <a class="social-btn" href="#" aria-label="TikTok"><svg viewBox="0 0 40 40"><use href="#ico-nota"/></svg></a>
+      </div>
+    </div>
+    <div class="footer__cta">
+      <h3>¿Hablemos?</h3>
+      <p>Construyamos valor juntos.</p>
+      <a href="#" class="btn btn--terracota">Contáctanos</a>
+    </div>
+    <div class="illus-slot">
+      <svg class="illus-slot__icon" viewBox="0 0 64 64"><use href="#ico-imagen"/></svg>
+      <span class="illus-slot__label">Paisaje montañas al atardecer</span>
+    </div>
+  </div>
+  <div class="wrap footer__bottom">
+    <span>© 2026 Periochi — Café de Origen</span>
+    <span>Hecho en las montañas de Colombia</span>
+  </div>
+</footer>
+
+<script>
+(function(){
+  const nav = document.getElementById('nav');
+  window.addEventListener('scroll', () => nav.classList.toggle('is-scrolled', window.scrollY > 40), { passive:true });
+
+  const menu = document.getElementById('mobileMenu');
+  document.getElementById('burgerBtn').addEventListener('click', () => menu.classList.add('is-open'));
+  document.getElementById('closeMenu').addEventListener('click', () => menu.classList.remove('is-open'));
+  menu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => menu.classList.remove('is-open')));
+
+  if ('IntersectionObserver' in window) {
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting){ e.target.classList.add('is-visible'); io.unobserve(e.target); } });
+    }, { threshold:.12 });
+    document.querySelectorAll('.reveal').forEach(t => io.observe(t));
+  } else {
+    document.querySelectorAll('.reveal').forEach(t => t.classList.add('is-visible'));
+  }
+})();
+</script>
+</body>
+</html>

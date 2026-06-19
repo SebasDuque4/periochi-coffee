@@ -1,0 +1,5 @@
+node_modules/
+periochi.db
+periochi.db-shm
+periochi.db-wal
+.env
