@@ -166,8 +166,12 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--mostaza);outline-of
   .comprometidos__grid{grid-template-columns:repeat(2,1fr);row-gap:2.4rem;}
   .footer__grid{grid-template-columns:1fr;gap:2.4rem;text-align:center;}
   .footer__social{justify-content:center;}
-  .hero .illus-slot{min-height:560px;}
-  .hero__text{position:relative;transform:none;top:auto;max-width:100%;padding:2.4rem var(--edge) 2rem;}
+  .hero{display:flex;flex-direction:column;padding-top:0;}
+  .hero .illus-slot{min-height:300px;order:-1;}
+  .hero__text{position:relative;transform:none;top:auto;max-width:100%;padding:2rem var(--edge) 2.8rem;text-align:center;align-items:center;}
+  .hero__cta{justify-content:center;flex-direction:column;align-items:center;}
+  .hero__cta .btn{width:100%;max-width:320px;justify-content:center;}
+  .scroll-chevron{display:none;}
 }
 @media(max-width:620px){
   .features__grid{grid-template-columns:1fr;}
