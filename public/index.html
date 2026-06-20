@@ -82,9 +82,13 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--mostaza);outline-of
 .scroll-chevron{position:absolute;bottom:1.6rem;left:var(--edge);z-index:3;width:30px;height:30px;color:var(--verde);animation:bob 1.8s ease-in-out infinite;}
 @keyframes bob{0%,100%{transform:translateY(0);}50%{transform:translateY(6px);}}
 
-/* puntos promo banner */
-.puntos-banner{background:var(--mostaza);color:var(--verde);text-align:center;padding:.75rem var(--edge);font-family:var(--sans);font-weight:700;font-size:.8rem;letter-spacing:.06em;text-transform:uppercase;}
-.puntos-banner a{text-decoration:underline;text-underline-offset:3px;}
+/* puntos promo banner — marquee delgado */
+.puntos-banner{background:var(--mostaza);color:var(--verde);padding:.38rem 0;overflow:hidden;white-space:nowrap;}
+.puntos-banner__track{display:inline-flex;animation:marquee 28s linear infinite;}
+.puntos-banner__track:hover{animation-play-state:paused;}
+.puntos-banner__item{font-family:var(--sans);font-weight:700;font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;padding:0 3rem;display:inline-flex;align-items:center;gap:.6rem;}
+.puntos-banner__item a{text-decoration:underline;text-underline-offset:3px;white-space:nowrap;}
+@keyframes marquee{0%{transform:translateX(0);}100%{transform:translateX(-50%);}}
 
 /* FEATURES */
 .features{padding:5rem 0;background:var(--crema);border-bottom:1px solid rgba(31,51,39,.1);}
@@ -141,6 +145,7 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--mostaza);outline-of
 /* FOOTER */
 .footer{position:relative;background:var(--verde);color:var(--crema);padding:4.5rem 0 2.4rem;overflow:hidden;}
 .footer__grid{display:grid;grid-template-columns:.9fr 1.1fr 1fr;gap:2.5rem;align-items:center;position:relative;z-index:2;}
+.footer__logo{text-align:center;}
 .footer__logo .logo__word{color:var(--crema);font-size:1.7rem;}
 .footer__logo .logo__tag{color:var(--crema);opacity:.75;}
 .footer__social{display:flex;gap:.7rem;margin-top:1.3rem;}
@@ -198,9 +203,18 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--mostaza);outline-of
 </svg>
 
 <div class="site-header">
-<!-- Banner puntos -->
+<!-- Banner puntos marquee -->
 <div class="puntos-banner">
-  ✦ Gana puntos en cada compra y canjéalos por descuentos — <a href="/tienda.html">Conoce los Puntos Periochi →</a>
+  <div class="puntos-banner__track">
+    <span class="puntos-banner__item">✦ Gana puntos en cada compra</span>
+    <span class="puntos-banner__item">✦ Canjéalos por descuentos exclusivos</span>
+    <span class="puntos-banner__item">✦ <a href="/tienda.html">Conoce los Puntos Periochi →</a></span>
+    <span class="puntos-banner__item">✦ 50 puntos de bienvenida al registrarte</span>
+    <span class="puntos-banner__item">✦ Gana puntos en cada compra</span>
+    <span class="puntos-banner__item">✦ Canjéalos por descuentos exclusivos</span>
+    <span class="puntos-banner__item">✦ <a href="/tienda.html">Conoce los Puntos Periochi →</a></span>
+    <span class="puntos-banner__item">✦ 50 puntos de bienvenida al registrarte</span>
+  </div>
 </div>
 
 <!-- NAV -->
@@ -375,8 +389,8 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--mostaza);outline-of
 <footer class="footer" id="contacto">
   <div class="wrap footer__grid">
     <div class="footer__logo">
-      <a href="/" class="logo logo--footer">
-        <img src="/logo_corto.png" alt="PERIOCHI" height="100">
+      <a href="/" class="logo logo--footer" style="justify-content:center;">
+        <img src="/logo_corto.png" alt="PERIOCHI" height="140">
       </a>
       <div class="footer__social">
         <a class="social-btn" href="#" aria-label="Instagram"><svg viewBox="0 0 40 40"><use href="#ico-camara"/></svg></a>
