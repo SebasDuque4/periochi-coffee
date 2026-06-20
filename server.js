@@ -4,12 +4,74 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const cors = require('cors');
 const path = require('path');
+const nodemailer = require('nodemailer');
 
 const app = express();
 const DB_PATH = process.env.DB_PATH || path.join(__dirname, 'periochi.db');
 const db = new Database(DB_PATH);
 const JWT_SECRET = process.env.JWT_SECRET || 'periochi-tierra-2026';
 const ADMIN_SECRET = process.env.ADMIN_SECRET || 'periochi-admin-setup';
+
+// ── EMAIL ──────────────────────────────────────
+const EMAIL_USER = process.env.EMAIL_USER;
+const EMAIL_PASS = process.env.EMAIL_PASS;
+const EMAIL_FROM = process.env.EMAIL_FROM || `"Periochi Café" <${EMAIL_USER}>`;
+const ADMIN_EMAIL = process.env.ADMIN_EMAIL || EMAIL_USER;
+
+const mailer = EMAIL_USER && EMAIL_PASS
+  ? nodemailer.createTransport({
+      service: 'gmail',
+      auth: { user: EMAIL_USER, pass: EMAIL_PASS },
+    })
+  : null;
+
+async function sendMail(to, subject, html) {
+  if (!mailer) return;
+  try {
+    await mailer.sendMail({ from: EMAIL_FROM, to, subject, html });
+  } catch (e) {
+    console.error('Email error:', e.message);
+  }
+}
+
+function orderConfirmEmail({ orderId, customerName, customerEmail, items, subtotal, discount, total, pointsEarned, address, city }) {
+  const itemRows = items.map(i =>
+    `<tr><td style="padding:8px 0;border-bottom:1px solid #e8dfc8">${i.name} × ${i.qty}</td><td style="padding:8px 0;border-bottom:1px solid #e8dfc8;text-align:right">$${Number(i.price*i.qty).toLocaleString('es-CO')}</td></tr>`
+  ).join('');
+
+  return `<!DOCTYPE html><html><head><meta charset="UTF-8"></head><body style="margin:0;padding:0;background:#f4e9d2;font-family:'Helvetica Neue',Arial,sans-serif;">
+  <div style="max-width:560px;margin:2rem auto;background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,.08)">
+    <div style="background:#1f3327;padding:2rem;text-align:center">
+      <img src="https://periochi-coffee-production.up.railway.app/logo_largo.png" alt="PERIOCHI" height="40" style="filter:brightness(0) invert(1);opacity:.95">
+      <p style="color:rgba(244,233,210,.7);margin:.6rem 0 0;font-size:.78rem;letter-spacing:.12em;text-transform:uppercase">Café de Origen</p>
+    </div>
+    <div style="padding:2rem">
+      <h2 style="color:#1f3327;font-size:1.4rem;margin:0 0 .4rem">¡Pedido confirmado, ${customerName.split(' ')[0]}!</h2>
+      <p style="color:#5b5b4c;font-size:.9rem;margin:0 0 1.6rem">Tu pedido <strong>#${orderId}</strong> fue recibido y estamos preparándolo con cariño.</p>
+      <table style="width:100%;border-collapse:collapse;font-size:.88rem;color:#1f3327">${itemRows}
+        ${discount > 0 ? `<tr><td style="padding:8px 0;color:#cc5a2c">Descuento puntos</td><td style="padding:8px 0;text-align:right;color:#cc5a2c">-$${Number(discount).toLocaleString('es-CO')}</td></tr>` : ''}
+        <tr><td style="padding:10px 0;font-weight:700;font-size:1rem">Total</td><td style="padding:10px 0;font-weight:700;font-size:1rem;text-align:right">$${Number(total).toLocaleString('es-CO')} COP</td></tr>
+      </table>
+      ${pointsEarned > 0 ? `<div style="margin:1.2rem 0;background:#f4e9d2;border-radius:8px;padding:.9rem 1rem;font-size:.84rem;color:#1f3327"><strong style="color:#d9a02c">✦ +${pointsEarned} Puntos Periochi</strong> acumulados en tu cuenta</div>` : ''}
+      <div style="margin:1.2rem 0;border-top:1px solid #e8dfc8;padding-top:1rem;font-size:.84rem;color:#5b5b4c">
+        <strong style="color:#1f3327">Dirección de entrega:</strong><br>${address}${city ? ', ' + city : ''}
+      </div>
+      <p style="font-size:.82rem;color:#5b5b4c;margin:1.2rem 0 0">Pronto nos pondremos en contacto para coordinar el envío. Si tienes preguntas escríbenos a <a href="mailto:hola@periochi.co" style="color:#cc5a2c">hola@periochi.co</a></p>
+    </div>
+    <div style="background:#1f3327;padding:1rem 2rem;text-align:center;font-size:.72rem;color:rgba(244,233,210,.5)">© 2026 Periochi — Hecho en las montañas de Colombia</div>
+  </div></body></html>`;
+}
+
+function orderNotifyAdminEmail({ orderId, customerName, customerEmail, items, total, address, city, phone }) {
+  return `<div style="font-family:Arial,sans-serif;max-width:500px;margin:0 auto">
+    <h2 style="color:#1f3327">🛒 Nuevo pedido #${orderId}</h2>
+    <p><strong>Cliente:</strong> ${customerName} (${customerEmail})</p>
+    <p><strong>Teléfono:</strong> ${phone || '—'}</p>
+    <p><strong>Dirección:</strong> ${address}${city ? ', ' + city : ''}</p>
+    <p><strong>Productos:</strong> ${items.map(i => `${i.name} × ${i.qty}`).join(', ')}</p>
+    <p><strong>Total:</strong> $${Number(total).toLocaleString('es-CO')} COP</p>
+  </div>`;
+}
 
 app.use(cors());
 app.use(express.json());
@@ -214,7 +276,7 @@ app.get('/api/products/:slug', (req, res) => {
 //  ORDERS
 // ──────────────────────────────────────────────
 app.post('/api/orders', auth, (req, res) => {
-  const { items, address, city, phone, notes, usePoints } = req.body || {};
+  const { items, address, city, phone, notes, usePoints, customerEmail } = req.body || {};
   if (!items?.length) return res.status(400).json({ error: 'El carrito está vacío' });
   if (!address?.trim()) return res.status(400).json({ error: 'La dirección es requerida' });
 
@@ -265,7 +327,19 @@ app.post('/api/orders', auth, (req, res) => {
   });
 
   const orderId = tx();
-  const user = db.prepare('SELECT points FROM users WHERE id = ?').get(req.user.id);
+  const user = db.prepare('SELECT id, name, email, points FROM users WHERE id = ?').get(req.user.id);
+
+  // Send confirmation emails (async, don't block response)
+  const emailTo = customerEmail || user.email;
+  const itemsForEmail = enriched.map(i => ({ name: i.product.name, qty: i.quantity, price: i.product.price }));
+  if (emailTo) {
+    sendMail(emailTo, `✦ Pedido #${orderId} confirmado — Periochi`,
+      orderConfirmEmail({ orderId, customerName: user.name, customerEmail: emailTo, items: itemsForEmail, subtotal, discount, total, pointsEarned: totalPointsEarned, address, city, phone }));
+  }
+  if (ADMIN_EMAIL && ADMIN_EMAIL !== emailTo) {
+    sendMail(ADMIN_EMAIL, `🛒 Nuevo pedido #${orderId} — ${user.name}`,
+      orderNotifyAdminEmail({ orderId, customerName: user.name, customerEmail: emailTo, items: itemsForEmail, total, address, city, phone }));
+  }
 
   res.json({ orderId, total, subtotal, discount, pointsEarned: totalPointsEarned, pointsUsed, newBalance: user.points });
 });
