@@ -183,6 +183,52 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--mostaza);outline-of
   .comprometidos__grid{grid-template-columns:1fr;}
   .footer__bottom{flex-direction:column;text-align:center;}
 }
+  .hero{
+  width:100%;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  background:#f8f4ec;
+}
+
+.hero__image{
+  width:100%;
+}
+
+.hero__image img{
+  width:100%;
+  display:block;
+  height:auto;
+}
+
+.hero__content{
+  max-width:900px;
+  padding:3rem 1.5rem 4rem;
+  text-align:center;
+}
+
+.hero__eye{
+  width:60px;
+  margin-bottom:1rem;
+}
+
+.hero h1{
+  font-size:clamp(2rem,4vw,4rem);
+  line-height:1.1;
+  margin-bottom:1rem;
+}
+
+.hero__sub{
+  font-size:1.2rem;
+  margin-bottom:2rem;
+}
+
+.hero__cta{
+  display:flex;
+  gap:1rem;
+  justify-content:center;
+  flex-wrap:wrap;
+}
 </style>
 </head>
 <body>
@@ -249,22 +295,39 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--mostaza);outline-of
 
 <!-- HERO -->
 <header class="hero" id="hero">
- <div class="hero__image">
-  <img
-    src="/hero-periochi.png"
-    alt="Ilustración Periochi Coffee"
-  >
-</div>
-  <div class="hero__text">
-    <svg class="hero__eye" viewBox="0 0 60 40"><use href="#ico-ojo"/></svg>
-    <h1>CAFÉ DE ORIGEN.<span class="l2">LEGADO DE LA TIERRA.</span></h1>
-    <p class="hero__sub">Cada taza cuenta una historia que comenzó mucho antes de nosotros.</p>
+
+  <div class="hero__image">
+    <img
+      src="/hero-periochi.png"
+      alt="Ilustración Periochi Coffee"
+    >
+  </div>
+
+  <div class="hero__content">
+    <svg class="hero__eye" viewBox="0 0 60 40">
+      <use href="#ico-ojo"/>
+    </svg>
+
+    <h1>
+      CAFÉ DE ORIGEN.
+      <span class="l2">LEGADO DE LA TIERRA.</span>
+    </h1>
+
+    <p class="hero__sub">
+      Cada taza cuenta una historia que comenzó mucho antes de nosotros.
+    </p>
+
     <div class="hero__cta">
-      <a href="#origen" class="btn btn--verde">Conoce nuestra historia</a>
-      <a href="/tienda.html" class="btn btn--terracota">Ir a la tienda</a>
+      <a href="#origen" class="btn btn--verde">
+        Conoce nuestra historia
+      </a>
+
+      <a href="/tienda.html" class="btn btn--terracota">
+        Ir a la tienda
+      </a>
     </div>
   </div>
-  <svg class="scroll-chevron" viewBox="0 0 40 24"><use href="#ico-chevron"/></svg>
+
 </header>
 
 <!-- FEATURES -->
