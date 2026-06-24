@@ -216,6 +216,24 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--mostaza);outline-of
 .cafe-card--verde .btn{color:var(--verde);}
 .cafe-card--rojo .btn{color:var(--rojo);}
 .cafe-card--mostaza .btn{color:var(--mostaza);}
+  .cafe-card__image{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  padding:1.5rem 1rem;
+}
+
+.cafe-card__image img{
+  width:100%;
+  max-width:260px;
+  height:auto;
+  display:block;
+  transition:transform .3s ease;
+}
+
+.cafe-card:hover .cafe-card__image img{
+  transform:scale(1.05);
+}
 
 /* MANIFIESTO */
 .manifiesto{position:relative;background:var(--verde);color:var(--crema);padding:5.5rem 0;overflow:hidden;}
@@ -463,44 +481,54 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--mostaza);outline-of
 </section>
 
 <!-- NUESTROS CAFÉS -->
-<section class="cafes reveal" id="cafe">
-  <div class="wrap">
-    <div class="section-title">
-      <div class="section-title__row">
-        <svg viewBox="0 0 40 40"><use href="#ico-espiral"/></svg>
-        <h2>Nuestros Cafés</h2>
-        <svg viewBox="0 0 40 40"><use href="#ico-espiral"/></svg>
-      </div>
-      <div class="section-title__rule"></div>
+<div class="cafes__grid">
+
+  <div class="cafe-card cafe-card--verde">
+    <div class="cafe-card__head"><span>Tradición</span></div>
+
+    <div class="cafe-card__image">
+      <img src="/cafe-periochi-1.png" alt="Café Tradición">
     </div>
-    <div class="cafes__grid">
-      <div class="cafe-card cafe-card--verde">
-        <div class="cafe-card__head"><span>Tradición</span></div>
-        <div class="illus-slot"><svg class="illus-slot__icon" viewBox="0 0 64 64"><use href="#ico-imagen"/></svg><span class="illus-slot__label">Mujer cosechera, cafetal</span></div>
-        <div class="cafe-card__body">
-          <p>Notas dulces, cuerpo balanceado y aroma floral.</p>
-          <a href="/tienda.html" class="btn btn--outline"><span>Ver café</span></a>
-        </div>
-      </div>
-      <div class="cafe-card cafe-card--rojo">
-        <div class="cafe-card__head"><span>Reserva</span></div>
-        <div class="illus-slot"><svg class="illus-slot__icon" viewBox="0 0 64 64"><use href="#ico-imagen"/></svg><span class="illus-slot__label">Caficultor, montañas</span></div>
-        <div class="cafe-card__body">
-          <p>Notas a chocolate, caramelo y frutos secos.</p>
-          <a href="/tienda.html" class="btn btn--outline"><span>Ver café</span></a>
-        </div>
-      </div>
-      <div class="cafe-card cafe-card--mostaza">
-        <div class="cafe-card__head"><span>Especial</span></div>
-        <div class="illus-slot"><svg class="illus-slot__icon" viewBox="0 0 64 64"><use href="#ico-imagen"/></svg><span class="illus-slot__label">Colibrí y flor de café</span></div>
-        <div class="cafe-card__body">
-          <p>Notas frutales, acidez vibrante y final prolongado.</p>
-          <a href="/tienda.html" class="btn btn--outline"><span>Ver café</span></a>
-        </div>
-      </div>
+
+    <div class="cafe-card__body">
+      <p>Notas dulces, cuerpo balanceado y aroma floral.</p>
+      <a href="/tienda.html" class="btn btn--outline">
+        <span>Ver café</span>
+      </a>
     </div>
   </div>
-</section>
+
+  <div class="cafe-card cafe-card--rojo">
+    <div class="cafe-card__head"><span>Reserva</span></div>
+
+    <div class="cafe-card__image">
+      <img src="/cafe-periochi-2.png" alt="Café Reserva">
+    </div>
+
+    <div class="cafe-card__body">
+      <p>Notas a chocolate, caramelo y frutos secos.</p>
+      <a href="/tienda.html" class="btn btn--outline">
+        <span>Ver café</span>
+      </a>
+    </div>
+  </div>
+
+  <div class="cafe-card cafe-card--mostaza">
+    <div class="cafe-card__head"><span>Especial</span></div>
+
+    <div class="cafe-card__image">
+      <img src="/cafe-periochi-3.png" alt="Café Especial">
+    </div>
+
+    <div class="cafe-card__body">
+      <p>Notas frutales, acidez vibrante y final prolongado.</p>
+      <a href="/tienda.html" class="btn btn--outline">
+        <span>Ver café</span>
+      </a>
+    </div>
+  </div>
+
+</div>
 
 <!-- MANIFIESTO -->
 <section class="manifiesto reveal" id="manifiesto">
